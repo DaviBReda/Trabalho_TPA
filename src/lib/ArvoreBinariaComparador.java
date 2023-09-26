@@ -73,8 +73,26 @@ public class ArvoreBinariaComparador<T> {
     };
 
     public int altura(){
-        return altura;
+      return calcAltura(this.raiz);
     };
+    public int calcAltura(No<T> no_at) {
+        int altura_direita = 0;
+        int altura_esquerda = 0;
+
+        if( (no_at.getFilhoEsquerda() == null) & (no_at.getFilhoDireita() == null) ){
+            return 0;
+        }
+        else{
+            altura_direita += calcAltura(no_at.getFilhoDireita());
+            altura_esquerda += calcAltura(no_at.getFilhoEsquerda());
+            if(altura_direita > altura_esquerda){
+                return (altura_direita + 1);
+            }
+            else{
+                return (altura_esquerda + 1);
+            }
+        }
+    }
 
     public int quantidadeNos(){
         return caminhaEmOrdemCount(this.raiz);
@@ -98,7 +116,8 @@ public class ArvoreBinariaComparador<T> {
             todos.add(aux);
             frontier.add(aux);
                 while(!frontier.isEmpty()){
-                   for(i=0,x,i++){
+                    int tam = frontier.size();
+                    for(i=0,i<tam,i++){
                         frontier.add(frontier[i].getFilhoEsquerda);
                         frontier.add(frontier[i].getFilhoDireita);
                    };
@@ -106,12 +125,6 @@ public class ArvoreBinariaComparador<T> {
                    todos = add(todos, frontier);
                 };
         return todos;
-
-        // Equanto frontier != null
-        // Chama get filhos de frontier
-        // Limpa anteriores (frontier - todos)
-        // Todos += frontier
-        // repete
     };
 
     public String caminharEmNivel(){
@@ -168,4 +181,4 @@ public class ArvoreBinariaComparador<T> {
         countProx = 0;
         /* limpar pilha */
     };
-}
+};
