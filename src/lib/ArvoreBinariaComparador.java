@@ -1,16 +1,18 @@
-package lib;
+package arvorebinaria.lib;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Comparator;
 
-public class ArvoreBinariaComparador<T> {
+public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
     protected No<T> raiz;
     protected Comparator<T> comparador;
     protected Integer altura, countProx;
+    protected LinkedList<No<T>> pilha;
 
     public ArvoreBinariaComparador(Comparator<T> comp) {
         comparador = comp;
-        countProx = 0;
+        pilha = new LinkedList<No<T>>();
     }
 
     public void adicionar(T novoValor){
@@ -50,17 +52,19 @@ public class ArvoreBinariaComparador<T> {
     };
 
     public T pesquisar(T valor){
-        No<T> aux = raiz;
-        if (valor == null) // trocar '== null' pelo comparator
-            return null;
-        else if(valor == aux.getValor()) // trocar '== info' pelo comparator
-            return valor;
-        else if (valor < aux.getValor()) // trocar '< aux.valor' pelo comparator
-            return pesquisar(valor); // dar um jeito de aux andar para esquerda
-        else
-            return pesquisar(valor); // dar um jeito de aux andar para direita
+        return pesquisarRaiz(valor, this.raiz);
     };
 
+    public T pesquisarRaiz(T valor, No<T> raiz){
+        if (valor == null) // trocar '== null' pelo comparator
+            return null;
+        else if(comparador.compare(valor, raiz.getValor()) == 0 /*valor == aux.getValor()*/) // trocar '== info' pelo comparator
+            return valor;
+        else if (comparador.compare(valor, raiz.getValor()) > 0 /*valor < aux.getValor()*/) // trocar '< aux.valor' pelo comparator
+            return pesquisarRaiz(valor, raiz.getFilhoEsquerda()); // dar um jeito de aux andar para esquerda
+        else
+            return pesquisarRaiz(valor, raiz.getFilhoDireita()); // dar um jeito de aux andar para direita
+    }
     public T remover(T valor){
         /*
             aux == raiz
@@ -73,26 +77,8 @@ public class ArvoreBinariaComparador<T> {
     };
 
     public int altura(){
-      return calcAltura(this.raiz);
+        return altura;
     };
-    public int calcAltura(No<T> no_at) {
-        int altura_direita = 0;
-        int altura_esquerda = 0;
-
-        if( (no_at.getFilhoEsquerda() == null) & (no_at.getFilhoDireita() == null) ){
-            return 0;
-        }
-        else{
-            altura_direita += calcAltura(no_at.getFilhoDireita());
-            altura_esquerda += calcAltura(no_at.getFilhoEsquerda());
-            if(altura_direita > altura_esquerda){
-                return (altura_direita + 1);
-            }
-            else{
-                return (altura_esquerda + 1);
-            }
-        }
-    }
 
     public int quantidadeNos(){
         return caminhaEmOrdemCount(this.raiz);
@@ -109,23 +95,28 @@ public class ArvoreBinariaComparador<T> {
         return soma;
     }
 
-    public ArrayList<No<T>> todosNos(){
-            No<T> aux = this.raiz;
-            ArrayList<No<T>> frontier = new ArrayList<No<T>>();
-            ArrayList<No<T>> todos = new ArrayList<No<T>>();
-            todos.add(aux);
-            frontier.add(aux);
-                while(!frontier.isEmpty()){
-                    int tam = frontier.size();
-                    for(i=0,i<tam,i++){
-                        frontier.add(frontier[i].getFilhoEsquerda);
-                        frontier.add(frontier[i].getFilhoDireita);
-                   };
-                   frontier = subtract(frontier, todos);
-                   todos = add(todos, frontier);
-                };
-        return todos;
-    };
+//    public ArrayList<No<T>> todosNos(){
+//        No<T> aux = this.raiz;
+//        ArrayList<No<T>> frontier = new ArrayList<No<T>>();
+//        ArrayList<No<T>> todos = new ArrayList<No<T>>();
+//        todos.add(aux);
+//        frontier.add(aux);
+//        while(!frontier.isEmpty()){
+//            for(i=0,x,i++){
+//                frontier.add(frontier[i].getFilhoEsquerda);
+//                frontier.add(frontier[i].getFilhoDireita);
+//            };
+//            frontier = subtract(frontier, todos);
+//            todos = add(todos, frontier);
+//        };
+//        return todos;
+//
+//        // Equanto frontier != null
+//        // Chama get filhos de frontier
+//        // Limpa anteriores (frontier - todos)
+//        // Todos += frontier
+//        // repete
+//    };
 
     public String caminharEmNivel(){
         ArrayList<No<T>> fila = new ArrayList<No<T>>();
@@ -167,6 +158,16 @@ public class ArvoreBinariaComparador<T> {
         return result;
     }
 
+    void popularPilha(No<T> raiz){
+        if(raiz.getFilhoEsquerda()==null){
+            this.pilha.push(raiz);
+            return;
+        }
+        else{
+            this.pilha.push(raiz);
+            popularPilha(raiz.getFilhoEsquerda());
+        }
+    }
     public T obterProximo(){
         /*
             self.countProx = 0;
@@ -174,11 +175,23 @@ public class ArvoreBinariaComparador<T> {
             ----------
             pilha filhos a esquerda é melhor
         */
-        return null;
+        No<T> aux = null;
+        if (this.raiz==null){
+            return null;
+        }
+        if(this.pilha.peekFirst()==null){
+            popularPilha(this.raiz);
+        }
+        aux = this.pilha.pop();
+        if(aux.getFilhoDireita()==null){
+            return aux.getValor();
+        }else{
+            popularPilha(aux.getFilhoDireita());
+            return aux.getValor();
+        }
     };
 
     public void reiniciarNavegacao(){
-        countProx = 0;
-        /* limpar pilha */
+        this.pilha.clear();
     };
-};
+}
