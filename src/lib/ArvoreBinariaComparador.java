@@ -64,7 +64,8 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
             return pesquisarRaiz(valor, raiz.getFilhoEsquerda()); // dar um jeito de aux andar para esquerda
         else
             return pesquisarRaiz(valor, raiz.getFilhoDireita()); // dar um jeito de aux andar para direita
-    }
+    };
+    
     public T remover(T valor){
         /*
             aux == raiz
@@ -95,6 +96,7 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
         return soma;
     }
 
+    
 //    public ArrayList<No<T>> todosNos(){
 //        No<T> aux = this.raiz;
 //        ArrayList<No<T>> frontier = new ArrayList<No<T>>();
@@ -118,28 +120,32 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
 //        // repete
 //    };
 
+    
     public String caminharEmNivel(){
-        ArrayList<No<T>> fila = new ArrayList<No<T>>();
-        if (this.raiz == null)
-            System.out.println("Caminhamento por Nível - Árvore Vazia");
-        else{
-            System.out.println("Caminhamento por Nível: ");
-            No<T> atual;
-            fila.add(this.raiz);
-            while (fila.size() >0 ){
-
-                atual = fila.get(0);
-                fila.remove(0);
-                System.out.println(atual.getValor() + " - " + atual.altura()); // descobrir altura do atual
-                if (atual.getFilhoEsquerda() != null)
-                    fila.add(atual.getFilhoEsquerda());
-                if (atual.getFilhoDireita() != null){
-                    fila.add(atual.getFilhoDireita());
+            ArrayList<No<T>> fila = new ArrayList<No<T>>();
+            StringBuilder result = new StringBuilder();
+            if (this.raiz == null){
+                // System.out.println("Caminhamento por Nível - Árvore Vazia");
+                return null;
+            }
+            else{
+                // System.out.println("Caminhamento por Nível: ");
+                No<T> atual;
+                fila.add(this.raiz);
+                while (!fila.isEmpty()){
+                    atual = fila.get(0);
+                    fila.remove(0);
+                    result.append(atual.getValor()).append(" - ");
+                    if (atual.getFilhoEsquerda() != null)
+                        fila.add(atual.getFilhoEsquerda());
+                    if (atual.getFilhoDireita() != null){
+                        fila.add(atual.getFilhoDireita());
+                    }
                 }
             }
-        }
-        return "/n";
-    };
+            return result.toString();
+        };
+    
     public String caminharEmOrdem(){
         // System.out.println("Saída do Caminhamento em Ordem");
         String str = caminhaEmOrdem(this.raiz);
