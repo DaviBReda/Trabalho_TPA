@@ -95,6 +95,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
         usar o nó "raiz" atual para modificar a arvore chamando o proximo nó a esquerda do aux e fazendo o que tem que ser feito
         em caso de folha só retornar que o nó não existe
         */
+        return null;
     }
 
     public int altura(){
