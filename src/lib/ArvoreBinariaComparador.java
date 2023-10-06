@@ -1,4 +1,4 @@
-package arvorebinaria.lib;
+package lib;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,7 +12,8 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
 
     public ArvoreBinariaComparador(Comparator<T> comp) {
         comparador = comp;
-        pilha = new LinkedList<No<T>>();
+        pilha = null;
+                // new LinkedList<No<T>>();
     }
 
     public void adicionar(T novoValor){
@@ -65,7 +66,7 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
         else
             return pesquisarRaiz(valor, raiz.getFilhoDireita()); // dar um jeito de aux andar para direita
     };
-    
+
     public T remover(T valor){
         /*
             aux == raiz
@@ -96,7 +97,7 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
         return soma;
     }
 
-    
+
 //    public ArrayList<No<T>> todosNos(){
 //        No<T> aux = this.raiz;
 //        ArrayList<No<T>> frontier = new ArrayList<No<T>>();
@@ -120,32 +121,32 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
 //        // repete
 //    };
 
-    
+
     public String caminharEmNivel(){
-            ArrayList<No<T>> fila = new ArrayList<No<T>>();
-            StringBuilder result = new StringBuilder();
-            if (this.raiz == null){
-                // System.out.println("Caminhamento por Nível - Árvore Vazia");
-                return null;
-            }
-            else{
-                // System.out.println("Caminhamento por Nível: ");
-                No<T> atual;
-                fila.add(this.raiz);
-                while (!fila.isEmpty()){
-                    atual = fila.get(0);
-                    fila.remove(0);
-                    result.append(atual.getValor()).append(" - ");
-                    if (atual.getFilhoEsquerda() != null)
-                        fila.add(atual.getFilhoEsquerda());
-                    if (atual.getFilhoDireita() != null){
-                        fila.add(atual.getFilhoDireita());
-                    }
+        ArrayList<No<T>> fila = new ArrayList<No<T>>();
+        StringBuilder result = new StringBuilder();
+        if (this.raiz == null){
+            // System.out.println("Caminhamento por Nível - Árvore Vazia");
+            return null;
+        }
+        else{
+            // System.out.println("Caminhamento por Nível: ");
+            No<T> atual;
+            fila.add(this.raiz);
+            while (!fila.isEmpty()){
+                atual = fila.get(0);
+                fila.remove(0);
+                result.append(atual.getValor()).append(" - ");
+                if (atual.getFilhoEsquerda() != null)
+                    fila.add(atual.getFilhoEsquerda());
+                if (atual.getFilhoDireita() != null){
+                    fila.add(atual.getFilhoDireita());
                 }
             }
-            return result.toString();
-        };
-    
+        }
+        return result.toString();
+    };
+
     public String caminharEmOrdem(){
         // System.out.println("Saída do Caminhamento em Ordem");
         String str = caminhaEmOrdem(this.raiz);
@@ -164,7 +165,7 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
         return result;
     }
 
-    void popularPilha(No<T> raiz){
+    private void popularPilha(No<T> raiz){
         if(raiz.getFilhoEsquerda()==null){
             this.pilha.push(raiz);
             return;
@@ -175,29 +176,27 @@ public class ArvoreBinariaComparador<T> implements IArvoreBinaria<T>{
         }
     }
     public T obterProximo(){
-        /*
-            self.countProx = 0;
-            Caminha para esquerda (direita se nao tiver) - count, mostra valor
-            ----------
-            pilha filhos a esquerda é melhor
-        */
         No<T> aux = null;
         if (this.raiz==null){
             return null;
         }
-        if(this.pilha.peekFirst()==null){
+        if(this.pilha==null){
+            this.pilha = new LinkedList<No<T>>();
             popularPilha(this.raiz);
+        }
+        if(this.pilha.isEmpty()){
+            return null;
         }
         aux = this.pilha.pop();
         if(aux.getFilhoDireita()==null){
             return aux.getValor();
-        }else{
+        }else {
             popularPilha(aux.getFilhoDireita());
             return aux.getValor();
         }
     };
 
     public void reiniciarNavegacao(){
-        this.pilha.clear();
+        this.pilha = null;
     };
 }
