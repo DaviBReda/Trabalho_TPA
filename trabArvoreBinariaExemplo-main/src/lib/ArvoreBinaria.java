@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lib;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Comparator;
 
-/**
- *
- * @author victoriocarvalho
- */
 public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
     protected No<T> raiz;
     protected Comparator<T> comparador;
@@ -24,7 +15,6 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
         pilha = null;
         pilhaAltura = null;
         altura = 0;
-        // new LinkedList<No<T>>();
     }
 
     public void adicionar(T novoValor){
@@ -79,16 +69,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
     }
 
     public T remover(T valor){return removerRaiz(valor, this.raiz, null);}
-        /*
-            aux == raiz
-            Se valor == aux.valor, remover aux e subir o da esquerda
-            Se não
-                Se valor > aux.valor, aux = aux.filhoDireita; chamar metodo recursivamente
-                Se não, aux = aux.filhoEsquerda; chamar metodo recursivamente
-          REUTILIZAR O PESQUISARRAIZ MODIFICADO
-        */
-
-
+    
     public T removerRaiz(T valor, No<T> raiz, No<T> pai){
         No<T> aux;
         if(raiz == null){
@@ -120,12 +101,11 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
                 return raiz.getValor();
             }
         } else {
-            pai = raiz;
             if (comparador.compare(valor, raiz.getValor()) > 0) {
-                return removerRaiz(valor, raiz.getFilhoEsquerda(), pai);
+                return removerRaiz(valor, raiz.getFilhoEsquerda(), raiz);
             }
             else
-                return removerRaiz(valor, raiz.getFilhoDireita(), pai);
+                return removerRaiz(valor, raiz.getFilhoDireita(), raiz);
             }
     }
 
@@ -214,32 +194,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
         }
         return soma;
     }
-
-
-//    public ArrayList<No<T>> todosNos(){
-//        No<T> aux = this.raiz;
-//        ArrayList<No<T>> frontier = new ArrayList<No<T>>();
-//        ArrayList<No<T>> todos = new ArrayList<No<T>>();
-//        todos.add(aux);
-//        frontier.add(aux);
-//        while(!frontier.isEmpty()){
-//            for(i=0,x,i++){
-//                frontier.add(frontier[i].getFilhoEsquerda);
-//                frontier.add(frontier[i].getFilhoDireita);
-//            };
-//            frontier = subtract(frontier, todos);
-//            todos = add(todos, frontier);
-//        };
-//        return todos;
-//
-//        // Equanto frontier != null
-//        // Chama get filhos de frontier
-//        // Limpa anteriores (frontier - todos)
-//        // Todos += frontier
-//        // repete
-//    };
-
-
+    
     public String caminharEmNivel(){
         ArrayList<No<T>> fila = new ArrayList<>();
         StringBuilder result = new StringBuilder();
