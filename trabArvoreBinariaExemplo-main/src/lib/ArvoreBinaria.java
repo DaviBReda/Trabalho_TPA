@@ -17,11 +17,12 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
     protected No<T> raiz;
     protected Comparator<T> comparador;
     protected Integer altura;
-    protected LinkedList<No<T>> pilha;
+    protected LinkedList<No<T>> pilha, pilhaAltura;
 
     public ArvoreBinaria(Comparator<T> comp) {
         comparador = comp;
         pilha = null;
+        pilhaAltura = null;
         altura = 0;
         // new LinkedList<No<T>>();
     }
