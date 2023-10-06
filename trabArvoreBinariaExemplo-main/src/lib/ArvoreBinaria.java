@@ -29,7 +29,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
 
     public void adicionar(T novoValor){
         int count = 0;
-        No<T> novoNo = new No<T>(novoValor);
+        No<T> novoNo = new No<>(novoValor);
         if (this.raiz == null) {
             this.raiz = novoNo;
         } else {
@@ -61,24 +61,24 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
                 altura = count;
             }
         }
-    };
+    }
 
     public T pesquisar(T valor){
         return pesquisarRaiz(valor, this.raiz);
-    };
+    }
 
     public T pesquisarRaiz(T valor, No<T> raiz){
         if (valor == null) // trocar '== null' pelo comparator
             return null;
-        else if(comparador.compare(valor, raiz.getValor()) == 0 /*valor == aux.getValor()*/) // trocar '== info' pelo comparator
+        else if(comparador.compare(valor, raiz.getValor()) == 0)
             return valor;
-        else if (comparador.compare(valor, raiz.getValor()) > 0 /*valor < aux.getValor()*/) // trocar '< aux.valor' pelo comparator
-            return pesquisarRaiz(valor, raiz.getFilhoEsquerda()); // dar um jeito de aux andar para esquerda
+        else if (comparador.compare(valor, raiz.getValor()) > 0)
+            return pesquisarRaiz(valor, raiz.getFilhoEsquerda()); // recursão usando o filho a esquerda como raiz
         else
-            return pesquisarRaiz(valor, raiz.getFilhoDireita()); // dar um jeito de aux andar para direita
-    };
+            return pesquisarRaiz(valor, raiz.getFilhoDireita()); //recursão usando o filho a direita como raiz
+    }
 
-    public T remover(T valor){
+    public T remover(T valor){return removerRaiz(valor, this.raiz, null);}
         /*
             aux == raiz
             Se valor == aux.valor, remover aux e subir o da esquerda
@@ -87,21 +87,51 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
                 Se não, aux = aux.filhoEsquerda; chamar metodo recursivamente
           REUTILIZAR O PESQUISARRAIZ MODIFICADO
         */
-        return null;
-    };
 
-    public T removerRaiz(T valor, No<T> raiz){
-        /*
-        Antes de entrar no proximo nó olhar o valor dele se for o nó que vai ser removido guardar ele em um aux
-        usar o nó "raiz" atual para modificar a arvore chamando o proximo nó a esquerda do aux e fazendo o que tem que ser feito
-        em caso de folha só retornar que o nó não existe
-        */
-        return null;
+
+    public T removerRaiz(T valor, No<T> raiz, No<T> pai){
+        No<T> aux;
+        if(raiz == null){
+            return null;
+        }
+        if(comparador.compare(valor, raiz.getValor()) == 0){
+            aux = raiz.getFilhoEsquerda();
+            if (pai == null){
+                this.raiz = aux;
+                while (aux.getFilhoDireita() != null){
+                    aux = aux.getFilhoDireita();
+                }
+                this.raiz.setFilhoDireita(raiz.getFilhoDireita());
+                return raiz.getValor();
+            }
+            if(comparador.compare(pai.getValor(), raiz.getValor()) < 0){
+                pai.setFilhoDireita(aux);
+                while (aux.getFilhoDireita() != null){
+                    aux = aux.getFilhoDireita();
+                }
+                aux.setFilhoDireita(raiz.getFilhoDireita());
+                return raiz.getValor();
+            } else {
+                pai.setFilhoEsquerda(aux);
+                while (aux.getFilhoDireita() != null){
+                    aux = aux.getFilhoDireita();
+                }
+                aux.setFilhoDireita(raiz.getFilhoDireita());
+                return raiz.getValor();
+            }
+        } else {
+            pai = raiz;
+            if (comparador.compare(valor, raiz.getValor()) > 0) {
+                return removerRaiz(valor, raiz.getFilhoEsquerda(), pai);
+            }
+            else
+                return removerRaiz(valor, raiz.getFilhoDireita(), pai);
+            }
     }
 
     public int altura(){
         return calcAltura(this.raiz);
-    };
+    }
 
     public int calcAltura(No<T> no_at) {
         int altura_direita = 0;
@@ -130,7 +160,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
     public int alturaIlimitado(){
         this.pilhaAltura.clear();
         this.pilhaAltura.push(this.raiz);
-        int val = 0;
+        int val;
         int soma = 0;
         while(!this.pilhaAltura.isEmpty()){
             val = calcAlturaIlimitado(this.pilhaAltura.pop(), 0);
@@ -172,7 +202,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
 
     public int quantidadeNos(){
         return caminhaEmOrdemCount(this.raiz);
-    };
+    }
 
     private int caminhaEmOrdemCount(No<T> raiz) {
         int soma = 0;
@@ -211,7 +241,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
 
 
     public String caminharEmNivel(){
-        ArrayList<No<T>> fila = new ArrayList<No<T>>();
+        ArrayList<No<T>> fila = new ArrayList<>();
         StringBuilder result = new StringBuilder();
         if (this.raiz == null){
             // System.out.println("Caminhamento por Nível - Árvore Vazia");
@@ -233,14 +263,9 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
             }
         }
         return result.toString();
-    };
+    }
 
-    public String caminharEmOrdem(){
-        // System.out.println("Saída do Caminhamento em Ordem");
-        String str = caminhaEmOrdem(this.raiz);
-        // System.out.println("Fim da Saída do Caminhamento em Ordem");
-        return str;
-    };
+    public String caminharEmOrdem(){return caminhaEmOrdem(this.raiz);}
 
     private String caminhaEmOrdem(No<T> raiz) {
         String result = "";
@@ -256,7 +281,6 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
     private void popularPilha(No<T> raiz){
         if(raiz.getFilhoEsquerda()==null){
             this.pilha.push(raiz);
-            return;
         }
         else{
             this.pilha.push(raiz);
@@ -264,12 +288,12 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
         }
     }
     public T obterProximo(){
-        No<T> aux = null;
+        No<T> aux;
         if (this.raiz==null){
             return null;
         }
         if(this.pilha==null){
-            this.pilha = new LinkedList<No<T>>();
+            this.pilha = new LinkedList<>();
             popularPilha(this.raiz);
         }
         if(this.pilha.isEmpty()){
@@ -282,9 +306,9 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
             popularPilha(aux.getFilhoDireita());
             return aux.getValor();
         }
-    };
+    }
 
     public void reiniciarNavegacao(){
         this.pilha = null;
-    };
+    }
 }
