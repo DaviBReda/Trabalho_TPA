@@ -125,6 +125,50 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
         }
     }
 
+    // Metodo extra
+    public int alturaIlimitado(){
+        this.pilhaAltura.clear();
+        this.pilhaAltura.push(this.raiz);
+        int val = 0;
+        int soma = 0;
+        while(!this.pilhaAltura.isEmpty()){
+            val = calcAlturaIlimitado(this.pilhaAltura.pop(), 0);
+            if(val > soma){
+                soma = val;
+            }
+        }
+        return soma;
+    }
+
+    // Metodo extra
+    public int calcAlturaIlimitado(No<T> no_at, int count) {
+        int altura_direita = 0;
+        int altura_esquerda = 0;
+        count += 1;
+
+        if( (no_at.getFilhoEsquerda() == null) & (no_at.getFilhoDireita() == null) ){
+            return 0;
+        }
+        else{
+            if((no_at.getFilhoDireita() != null) & (count < 100)){
+                altura_direita += calcAlturaIlimitado(no_at.getFilhoDireita(), count);
+            }
+            else{
+                this.pilhaAltura.push(no_at.getFilhoDireita());
+                return 0;
+            }
+            if((no_at.getFilhoEsquerda() != null) & (count < 100)){
+                altura_esquerda += calcAlturaIlimitado(no_at.getFilhoEsquerda(), count);
+            }
+            if(altura_direita > altura_esquerda){
+                return (altura_direita + 1);
+            }
+            else{
+                return (altura_esquerda + 1);
+            }
+        }
+    }
+
     public int quantidadeNos(){
         return caminhaEmOrdemCount(this.raiz);
     };
