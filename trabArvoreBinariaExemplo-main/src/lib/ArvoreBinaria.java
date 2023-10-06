@@ -84,9 +84,18 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
             Se não
                 Se valor > aux.valor, aux = aux.filhoDireita; chamar metodo recursivamente
                 Se não, aux = aux.filhoEsquerda; chamar metodo recursivamente
+          REUTILIZAR O PESQUISARRAIZ MODIFICADO
         */
         return null;
     };
+
+    public T removerRaiz(T valor, No<T> raiz){
+        /*
+        Antes de entrar no proximo nó olhar o valor dele se for o nó que vai ser removido guardar ele em um aux
+        usar o nó "raiz" atual para modificar a arvore chamando o proximo nó a esquerda do aux e fazendo o que tem que ser feito
+        em caso de folha só retornar que o nó não existe
+        */
+    }
 
     public int altura(){
         return calcAltura(this.raiz);
