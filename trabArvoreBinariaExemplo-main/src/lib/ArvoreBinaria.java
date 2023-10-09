@@ -136,40 +136,52 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
         }
     }
 
-    // Metodo extra
+    //___________________________________________Metodo extra______________________________________________________________________________________
     public int alturaIlimitado(){
+        this.pilhaAltura = new LinkedList<>();
         this.pilhaAltura.clear();
         this.pilhaAltura.push(this.raiz);
         int val;
         int soma = 0;
         while(!this.pilhaAltura.isEmpty()){
-            val = calcAlturaIlimitado(this.pilhaAltura.pop(), 0);
-            if(val > soma){
-                soma = val;
+            try{
+                val = calcAlturaIlimitado(this.pilhaAltura.pop(), 0);
+                soma += val;
+            }
+            catch(Exception e){
+                System.out.println("Exception caught: "+ e);
             }
         }
         return soma;
     }
 
-    // Metodo extra
+    //________________________________________________Metodo extra____________________________________________________________________________________
     public int calcAlturaIlimitado(No<T> no_at, int count) {
         int altura_direita = 0;
         int altura_esquerda = 0;
         count += 1;
-
+        if(no_at == null){
+            return 0;
+        }
         if( (no_at.getFilhoEsquerda() == null) & (no_at.getFilhoDireita() == null) ){
             return 0;
         }
         else{
-            if((no_at.getFilhoDireita() != null) & (count < 100)){
-                altura_direita += calcAlturaIlimitado(no_at.getFilhoDireita(), count);
+            if(no_at.getFilhoDireita() != null){
+                if(count < 100){
+                    altura_direita += calcAlturaIlimitado(no_at.getFilhoDireita(), count);
+                }
+                else{
+                    this.pilhaAltura.push(no_at.getFilhoDireita());
+                }
             }
-            else{
-                this.pilhaAltura.push(no_at.getFilhoDireita());
-                return 0;
-            }
-            if((no_at.getFilhoEsquerda() != null) & (count < 100)){
-                altura_esquerda += calcAlturaIlimitado(no_at.getFilhoEsquerda(), count);
+            if(no_at.getFilhoEsquerda() != null){
+                if(count < 100){
+                    altura_esquerda += calcAlturaIlimitado(no_at.getFilhoEsquerda(), count);
+                }
+                else{
+                    this.pilhaAltura.push(no_at.getFilhoEsquerda());
+                }
             }
             if(altura_direita > altura_esquerda){
                 return (altura_direita + 1);
