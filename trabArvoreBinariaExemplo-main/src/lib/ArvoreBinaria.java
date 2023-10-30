@@ -68,46 +68,47 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
             return pesquisarRaiz(valor, raiz.getFilhoDireita()); //recursão usando o filho a direita como raiz
     }
 
-    public T remover(T valor){return removerRaiz(valor, this.raiz, null);}
-    
-    public T removerRaiz(T valor, No<T> raiz, No<T> pai){
-        No<T> aux;
-        if(raiz == null){
-            return null;
-        }
-        if(comparador.compare(valor, raiz.getValor()) == 0){
-            aux = raiz.getFilhoEsquerda();
-            if (pai == null){
-                this.raiz = aux;
-                while (aux.getFilhoDireita() != null){
-                    aux = aux.getFilhoDireita();
-                }
-                this.raiz.setFilhoDireita(raiz.getFilhoDireita());
-                return raiz.getValor();
-            }
-            if(comparador.compare(pai.getValor(), raiz.getValor()) < 0){
-                pai.setFilhoDireita(aux);
-                while (aux.getFilhoDireita() != null){
-                    aux = aux.getFilhoDireita();
-                }
-                aux.setFilhoDireita(raiz.getFilhoDireita());
-                return raiz.getValor();
-            } else {
-                pai.setFilhoEsquerda(aux);
-                while (aux.getFilhoDireita() != null){
-                    aux = aux.getFilhoDireita();
-                }
-                aux.setFilhoDireita(raiz.getFilhoDireita());
-                return raiz.getValor();
-            }
-        } else {
-            if (comparador.compare(valor, raiz.getValor()) > 0) {
-                return removerRaiz(valor, raiz.getFilhoEsquerda(), raiz);
-            }
-            else
-                return removerRaiz(valor, raiz.getFilhoDireita(), raiz);
-            }
-    }
+    public T remover(T valor){return null;}
+//    public T remover(T valor){return removerRaiz(valor, this.raiz, null);}
+//
+//    public T removerRaiz(T valor, No<T> raiz, No<T> pai){
+//        No<T> aux;
+//        if(raiz == null){
+//            return null;
+//        }
+//        if(comparador.compare(valor, raiz.getValor()) == 0){
+//            aux = raiz.getFilhoEsquerda();
+//            if (pai == null){
+//                this.raiz = aux;
+//                while (aux.getFilhoDireita() != null){
+//                    aux = aux.getFilhoDireita();
+//                }
+//                this.raiz.setFilhoDireita(raiz.getFilhoDireita());
+//                return raiz.getValor();
+//            }
+//            if(comparador.compare(pai.getValor(), raiz.getValor()) < 0){
+//                pai.setFilhoDireita(aux);
+//                while (aux.getFilhoDireita() != null){
+//                    aux = aux.getFilhoDireita();
+//                }
+//                aux.setFilhoDireita(raiz.getFilhoDireita());
+//                return raiz.getValor();
+//            } else {
+//                pai.setFilhoEsquerda(aux);
+//                while (aux.getFilhoDireita() != null){
+//                    aux = aux.getFilhoDireita();
+//                }
+//                aux.setFilhoDireita(raiz.getFilhoDireita());
+//                return raiz.getValor();
+//            }
+//        } else {
+//            if (comparador.compare(valor, raiz.getValor()) > 0) {
+//                return removerRaiz(valor, raiz.getFilhoEsquerda(), raiz);
+//            }
+//            else
+//                return removerRaiz(valor, raiz.getFilhoDireita(), raiz);
+//            }
+//    }
 
     public int altura(){
         return calcAltura(this.raiz);
@@ -277,5 +278,22 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T>{
 
     public void reiniciarNavegacao(){
         this.pilha = null;
+    }
+
+    protected No<T> addRecursao(No<T> atual, No<T> novo){
+        if (comparador.compare(novo.getValor(), atual.getValor()) < 0){
+            if(atual.getFilhoEsquerda()==null){
+                atual.setFilhoEsquerda(novo);
+            }else{
+                atual.setFilhoEsquerda(addRecursao(atual.getFilhoEsquerda(), novo));
+            }
+        }else{
+            if (atual.getFilhoDireita()==null){
+                atual.setFilhoDireita(novo);
+            }else{
+                atual.setFilhoDireita(addRecursao(atual.getFilhoDireita(), novo));
+            }
+        }
+        return atual;
     }
 }

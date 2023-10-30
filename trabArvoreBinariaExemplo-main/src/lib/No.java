@@ -63,6 +63,47 @@ public class No<T> {
     public void setFilhoEsquerda(No<T> filhoEsquerda) {
         this.filhoEsquerda = filhoEsquerda;
     }
-    
-    
+
+//    public int fatorBalanceamento() {
+//        int altura_direita = 0;
+//        int altura_esquerda = 0;
+//
+//        if( (getFilhoEsquerda() == null) & (getFilhoDireita() == null) ){
+//            return 0;
+//        }
+//        else{
+//            if(getFilhoDireita() != null){
+//                altura_direita += getFilhoDireita().fatorBalanceamento();
+//            }
+//            if(getFilhoEsquerda() != null){
+//                altura_esquerda += getFilhoEsquerda().fatorBalanceamento();
+//            }
+//            if(altura_direita > altura_esquerda){
+//                return (altura_direita + 1);
+//            }
+//            else{
+//                return (altura_esquerda + 1);
+//            }
+//        }
+//    }
+
+    public int obterAltura(){
+        return obterAltura(this);
+    }
+
+    private int obterAltura(No<T> r){
+        if (r==null) return -1;
+        else{
+            int hd = obterAltura(r.getFilhoDireita());
+            int he = obterAltura(r.getFilhoEsquerda());
+            if(hd>he)
+                return hd+1;
+            else
+                return he+1;
+        }
+    }
+
+    public int fatorBalanceamento(){
+        return obterAltura(this.filhoDireita) - obterAltura(this.filhoEsquerda);
+    }
 }
