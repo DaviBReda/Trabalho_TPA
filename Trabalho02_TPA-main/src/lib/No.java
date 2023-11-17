@@ -12,9 +12,6 @@ public class No<T> {
         this.fronteira = new HashMap<No<T>, Integer>();
     }
 
-    /**
-     * @return the valor
-     */
     public T getValor() {
         return valor;
     }
@@ -28,9 +25,15 @@ public class No<T> {
         no.fronteira.put(this, peso);
     }
 
-    /**
-     * @param valor the valor to set
-     */
+    public void removeVizinho(No<T> no, int peso){
+        this.fronteira.remove(no, peso);
+    }
+
+    public void removeVizinhoND(No<T> no, int peso){
+        this.fronteira.remove(no, peso);
+        no.fronteira.remove(this, peso);
+    }
+
     public void setValor(T valor) {
         this.valor = valor;
     }
