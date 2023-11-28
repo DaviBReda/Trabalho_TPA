@@ -1,6 +1,7 @@
 package lib;
 
 import java.util.LinkedList;
+import java.util.HashMap;
 
 public class Grafo<T> {
     private LinkedList<No<T>> listaNos;
@@ -102,4 +103,34 @@ public class Grafo<T> {
             }
         }
     }
+
+    public boolean verificarCiclo(){
+        for (int i=0 ; i<this.listaNos.size() ; i++){
+            if(verificarCicloGrafoConexoND(this.listaNos.get(i))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean verificarCicloGrafoConexoND(No<T> no_inicial){
+        LinkedList<No<T>> nos_visitados = new LinkedList<No<T>>();
+        LinkedList<No<T>> nos_restantes = new LinkedList<No<T>>();
+        nos_restantes.add(no_inicial);
+        No<T> no_atual;
+
+        while(!(nos_restantes.isEmpty())){
+            no_atual = nos_restantes.pop();
+            nos_visitados.add(no_atual);
+
+            for (int i=0 ; i<no_atual.getVizinhos().size() ; i++){
+                if(nos_visitados.contains(no_atual.getVizinhos().get(i))){
+                    return true;
+                }
+                nos_restantes.add(no_atual.getVizinhos().get(i));
+            }
+        }
+        return false;
+    }
+
 }
