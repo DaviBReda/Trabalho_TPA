@@ -1,6 +1,7 @@
 package lib;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class No<T> {
 
@@ -33,6 +34,12 @@ public class No<T> {
         this.fronteira.remove(no, peso);
         no.fronteira.remove(this, peso);
     }
+
+    public LinkedList<No<T>> getVizinhos(){
+        LinkedList<No<T>> f = new LinkedList<>(fronteira.keySet());
+        return f;
+    }
+
 
     public void setValor(T valor) {
         this.valor = valor;
