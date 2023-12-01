@@ -120,17 +120,58 @@ public class Grafo<T> {
         No<T> no_atual;
 
         while(!(nos_restantes.isEmpty())){
-            no_atual = nos_restantes.pop();
+            no_atual = nos_restantes.removeFirst();
             nos_visitados.add(no_atual);
 
             for (int i=0 ; i<no_atual.getVizinhos().size() ; i++){
                 if(nos_visitados.contains(no_atual.getVizinhos().get(i))){
                     return true;
                 }
-                nos_restantes.add(no_atual.getVizinhos().get(i));
+                else if(!(nos_restantes.contains(no_atual.getVizinhos().get(i)))) {
+                    nos_restantes.add(no_atual.getVizinhos().get(i));
+                }
             }
         }
         return false;
+    }
+
+    // REMOVER INTERSEÇÂO ENTRE DUAS LINKED LISTS PARA ENCONTRAR OS NOS RESTANTES (FORA DO CAMINHO)
+    public String ordem_topologica(){
+        LinkedList<No<T>> todos_nos = this.listaNos;
+        String ot = "";
+
+        while(!todos_nos.isEmpty()){
+                LinkedList<No<T>> ot_do_no_i = ordem_topologicaNo(todos_nos.get(i));
+                todos_nos.s
+        }
+        for (int i=0 ; i<todos_nos.size() ; i++) {
+        ot = ot.concat(todos_nos.get(i).getValor().toString() + ", ");
+        }
+        ot = ot.substring(0, ot.length() - 2);
+        return ot;
+    }
+
+    public LinkedList<No<T>> ordem_topologicaNo(No<T> no_inicial){
+        LinkedList<No<T>> nos_visitados = new LinkedList<No<T>>();
+        LinkedList<No<T>> nos_restantes = new LinkedList<No<T>>();
+        nos_restantes.add(no_inicial);
+        No<T> no_atual;
+
+        while(!(nos_restantes.isEmpty())){
+            no_atual = nos_restantes.removeFirst();
+            nos_visitados.add(no_atual);
+
+            for (int i=0 ; i<no_atual.getVizinhos().size() ; i++){
+                if(nos_visitados.contains(no_atual.getVizinhos().get(i))){
+                    LinkedList<No<T>> loop_list = new LinkedList<>();
+                    return loop_list;
+                }
+                else if(!(nos_restantes.contains(no_atual.getVizinhos().get(i)))) {
+                        nos_restantes.add(no_atual.getVizinhos().get(i));
+                    }
+            }
+        }
+        return nos_visitados
     }
 
 }
