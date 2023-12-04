@@ -1,7 +1,7 @@
 package lib;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.HashMap;
 
 public class Grafo<T> {
     private LinkedList<No<T>> listaNos;
@@ -138,14 +138,17 @@ public class Grafo<T> {
     // REMOVER INTERSEÇÂO ENTRE DUAS LINKED LISTS PARA ENCONTRAR OS NOS RESTANTES (FORA DO CAMINHO)
     public String ordem_topologica(){
         LinkedList<No<T>> todos_nos = this.listaNos;
+        LinkedList<No<T>> ordem_topologica = new LinkedList<No<T>>();
+
         String ot = "";
 
         while(!todos_nos.isEmpty()){
-                LinkedList<No<T>> ot_do_no_i = ordem_topologicaNo(todos_nos.get(i));
-                todos_nos.s
+                LinkedList<No<T>> ot_do_no_i = ordem_topologicaNo(todos_nos.get(0));
+                ordem_topologica.addAll(ot_do_no_i);
+                removerElementos(todos_nos, ot_do_no_i);
         }
-        for (int i=0 ; i<todos_nos.size() ; i++) {
-        ot = ot.concat(todos_nos.get(i).getValor().toString() + ", ");
+        for (int i=0 ; i<ordem_topologica.size() ; i++) {
+        ot = ot.concat(ordem_topologica.get(i).getValor().toString() + ", ");
         }
         ot = ot.substring(0, ot.length() - 2);
         return ot;
@@ -171,7 +174,20 @@ public class Grafo<T> {
                     }
             }
         }
-        return nos_visitados
+        return nos_visitados;
+    }
+
+    public static <T> void removerElementos(LinkedList<No<T>> lista_1, LinkedList<No<T>> lista_2) {
+        // Cria um iterador para percorrer a lista_2
+        Iterator<No<T>> iterator = lista_2.iterator();
+
+        // Itera sobre a lista_2
+        while (iterator.hasNext()) {
+            No<T> elemento = iterator.next();
+
+            // Remove o elemento da lista_1, se presente
+            lista_1.remove(elemento);
+        }
     }
 
 }
