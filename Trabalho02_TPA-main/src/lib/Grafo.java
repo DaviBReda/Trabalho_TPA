@@ -137,21 +137,28 @@ public class Grafo<T> {
 
     // REMOVER INTERSEÇÂO ENTRE DUAS LINKED LISTS PARA ENCONTRAR OS NOS RESTANTES (FORA DO CAMINHO)
     public String ordem_topologica(){
-        LinkedList<No<T>> todos_nos = this.listaNos;
-        LinkedList<No<T>> ordem_topologica = new LinkedList<No<T>>();
+        if(!this.verificarCiclo()) {
+            LinkedList<No<T>> todos_nos = this.listaNos;
+            LinkedList<No<T>> ordem_topologica = new LinkedList<No<T>>();
 
-        String ot = "";
+            String ot = "";
 
-        while(!todos_nos.isEmpty()){
+            while (!todos_nos.isEmpty()) {
                 LinkedList<No<T>> ot_do_no_i = ordem_topologicaNo(todos_nos.get(0));
-                ordem_topologica.addAll(ot_do_no_i);
+                for (No<T> elemento : ot_do_no_i) {
+                    if (this.listaNos.contains(elemento)) {
+                        ordem_topologica.add(elemento);
+                    }
+                }
                 removerElementos(todos_nos, ot_do_no_i);
+            }
+            for (int i = 0; i < ordem_topologica.size(); i++) {
+                ot = ot.concat(ordem_topologica.get(i).getValor().toString() + ", ");
+            }
+            ot = ot.substring(0, ot.length() - 2);
+            return ot;
         }
-        for (int i=0 ; i<ordem_topologica.size() ; i++) {
-        ot = ot.concat(ordem_topologica.get(i).getValor().toString() + ", ");
-        }
-        ot = ot.substring(0, ot.length() - 2);
-        return ot;
+        return "";
     }
 
     public LinkedList<No<T>> ordem_topologicaNo(No<T> no_inicial){
