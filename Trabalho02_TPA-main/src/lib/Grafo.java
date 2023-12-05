@@ -106,14 +106,14 @@ public class Grafo<T> {
 
     public boolean verificarCiclo(){
         for (int i=0 ; i<this.listaNos.size() ; i++){
-            if(verificarCicloGrafoConexoND(this.listaNos.get(i))){
+            if(verificarCicloGrafoConexotest(this.listaNos.get(i))){
                 return true;
             }
         }
         return false;
     }
 
-    private boolean verificarCicloGrafoConexoND(No<T> no_inicial){
+    private boolean verificarCicloGrafoConexoog(No<T> no_inicial){
         LinkedList<No<T>> nos_visitados = new LinkedList<No<T>>();
         LinkedList<No<T>> nos_restantes = new LinkedList<No<T>>();
         nos_restantes.add(no_inicial);
@@ -128,6 +128,29 @@ public class Grafo<T> {
                     return true;
                 }
                 else if(!(nos_restantes.contains(no_atual.getVizinhos().get(i)))) {
+                    nos_restantes.add(no_atual.getVizinhos().get(i));
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean verificarCicloGrafoConexotest(No<T> no_inicial){
+        LinkedList<No<T>> nos_visitados = new LinkedList<No<T>>();
+        LinkedList<No<T>> nos_restantes = new LinkedList<No<T>>();
+        nos_restantes.add(no_inicial);
+        No<T> no_atual;
+
+        while(!(nos_restantes.isEmpty())){
+            no_atual = nos_restantes.removeFirst();
+            nos_visitados.add(no_atual);
+
+            if(no_atual.getVizinhos().contains(no_inicial)){
+                return true;
+            }
+
+            for (int i=0 ; i<no_atual.getVizinhos().size() ; i++){
+                if(!(nos_restantes.contains(no_atual.getVizinhos().get(i)) || nos_visitados.contains(no_atual.getVizinhos().get(i)))) {
                     nos_restantes.add(no_atual.getVizinhos().get(i));
                 }
             }
@@ -173,8 +196,7 @@ public class Grafo<T> {
 
             for (int i=0 ; i<no_atual.getVizinhos().size() ; i++){
                 if(nos_visitados.contains(no_atual.getVizinhos().get(i))){
-                    LinkedList<No<T>> loop_list = new LinkedList<>();
-                    return loop_list;
+                    return nos_visitados;
                 }
                 else if(!(nos_restantes.contains(no_atual.getVizinhos().get(i)))) {
                         nos_restantes.add(no_atual.getVizinhos().get(i));
