@@ -1,16 +1,16 @@
 package lib;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class No<T> {
 
     private T valor;
-    private HashMap<No<T>, Integer> fronteira;
+    private LinkedHashMap<No<T>, Integer> fronteira;
 
     public No(T valor){
         this.valor = valor;
-        this.fronteira = new HashMap<No<T>, Integer>();
+        this.fronteira = new LinkedHashMap<No<T>, Integer>();
     }
 
     public T getValor() {
