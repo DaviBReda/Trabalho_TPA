@@ -1,0 +1,30 @@
+public class Livro {
+
+    // Atributos
+    private String nome;
+    private int numeroPaginas;
+
+    // Construtor
+    public Livro(String nome, int numeroPaginas) {
+        this.nome = nome;
+        this.numeroPaginas = numeroPaginas;
+    }
+
+    // Métodos getter e setter para o atributo "Nome"
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    // Métodos getter e setter para o atributo "Numero de Páginas"
+    public int getNumeroPaginas() {
+        return numeroPaginas;
+    }
+
+    public void setNumeroPaginas(int numeroPaginas) {
+        this.numeroPaginas = numeroPaginas;
+    }
+}
