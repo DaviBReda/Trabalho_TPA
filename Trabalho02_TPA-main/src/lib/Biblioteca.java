@@ -1,3 +1,5 @@
+package lib;
+
 import java.util.Scanner;
 
 public class Biblioteca {
@@ -18,31 +20,38 @@ public class Biblioteca {
         int numeroPaginas = scanner.nextInt();
 
         Livro livro = new Livro(nome, numeroPaginas);
-        grafoLivros.addElemento(livro);
+        No<Livro> livroNo = new No<>(livro);
+        grafoLivros.addElemento(livroNo);
+
+        System.out.println("O livro possui um pré-requisito? (S/N)");
+        scanner.nextLine();  // Consumir a quebra de linha
+        String respostaPrereq = scanner.nextLine();
+
+        if (respostaPrereq.equalsIgnoreCase("S")) {
+            System.out.println("Digite o nome do livro pré-requisito:");
+            String nomePrereq = scanner.nextLine();
+            No<Livro> livroEncontrado = this.consultarLivro(nomePrereq);
+
+            if (livroEncontrado != null) {
+                grafoLivros.addCaminho(livroEncontrado, livroNo, 1);  // Adapte o peso conforme necessário
+                System.out.println("Pré-requisito cadastrado com sucesso!\n");
+            } else {
+                System.out.println("Livro usado como pré-requisito não cadastrado");
+            }
+        }
 
         System.out.println("Livro cadastrado com sucesso!\n");
     }
 
-    public void consultarLivro() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Digite o nome do livro para consultar:");
-        String nome = scanner.nextLine();
-
-        boolean encontrado = false;
+    public No<Livro> consultarLivro(String nome) {
         for (No<Livro> noLivro : grafoLivros.getListaNos()) {
             if (noLivro.getValor().getNome().equalsIgnoreCase(nome)) {
-                System.out.println("Livro encontrado:");
-                noLivro.getValor().imprimirDetalhes();
-                encontrado = true;
-                break;
+                return noLivro;
             }
         }
-
-        if (!encontrado) {
-            System.out.println("Livro não encontrado.\n");
-        }
+        return null;
     }
+
 
     public void excluirLivro() {
         Scanner scanner = new Scanner(System.in);
@@ -71,43 +80,5 @@ public class Biblioteca {
                 System.out.println("---------------");
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Biblioteca biblioteca = new Biblioteca();
-        Scanner scanner = new Scanner(System.in);
-
-        int opcao;
-        do {
-            System.out.println("Escolha uma opção:");
-            System.out.println("1 - Cadastrar Livro");
-            System.out.println("2 - Consultar Livro");
-            System.out.println("3 - Excluir Livro");
-            System.out.println("4 - Exibir Todos");
-            System.out.println("0 - Sair");
-
-            opcao = scanner.nextInt();
-            scanner.nextLine();  // Consumir a quebra de linha
-
-            switch (opcao) {
-                case 1:
-                    biblioteca.cadastrarLivro();
-                    break;
-                case 2:
-                    biblioteca.consultarLivro();
-                    break;
-                case 3:
-                    biblioteca.excluirLivro();
-                    break;
-                case 4:
-                    biblioteca.exibirTodos();
-                    break;
-                case 0:
-                    System.out.println("Saindo do programa. Até mais!");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Tente novamente.");
-            }
-        } while (opcao != 0);
     }
 }
