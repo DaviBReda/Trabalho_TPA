@@ -1,3 +1,4 @@
+package lib;
 public class Livro {
 
     private String nome;
@@ -9,7 +10,7 @@ public class Livro {
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public void setNome(String nome) {
@@ -17,10 +18,15 @@ public class Livro {
     }
 
     public int getNumeroPaginas() {
-        return numeroPaginas;
+        return this.numeroPaginas;
     }
 
     public void setNumeroPaginas(int numeroPaginas) {
         this.numeroPaginas = numeroPaginas;
+    }
+
+    public void imprimirDetalhes() {
+        System.out.println("Nome do livro: " + nome);
+        System.out.println("Número de páginas: " + numeroPaginas);
     }
 }
