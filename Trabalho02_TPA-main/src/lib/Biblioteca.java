@@ -3,7 +3,7 @@ package lib;
 import java.util.Scanner;
 
 public class Biblioteca {
-
+    private int posicaoAtual = 0;
     private Grafo<Livro> grafoLivros;
 
     public Biblioteca() {
@@ -52,7 +52,6 @@ public class Biblioteca {
         return null;
     }
 
-
     public void excluirLivro() {
         Scanner scanner = new Scanner(System.in);
 
@@ -71,14 +70,22 @@ public class Biblioteca {
     }
 
     public void exibirTodos() {
-        if (grafoLivros.getListaNos().isEmpty()) {
-            System.out.println("A biblioteca está vazia.\n");
-        } else {
-            System.out.println("Livros na biblioteca:");
-            for (No<Livro> noLivro : grafoLivros.getListaNos()) {
-                noLivro.getValor().imprimirDetalhes();
-                System.out.println("---------------");
-            }
+        int limiteSuperior = posicaoAtual + 10;
+
+        if (posicaoAtual >= grafoLivros.getListaNos().size()) {
+            System.out.println("Todos os livros foram exibidos.\n");
+            return;
         }
+
+        System.out.println("Livros na biblioteca (de " + posicaoAtual + " a " + (limiteSuperior - 1) + "):");
+        for (int i = posicaoAtual; i < limiteSuperior && i < grafoLivros.getListaNos().size(); i++) {
+            grafoLivros.getListaNos().get(i).getValor().imprimirDetalhes();
+            System.out.println("---------------");
+        }
+
+        posicaoAtual = limiteSuperior;
+        System.out.println();
     }
+}
+
 }
