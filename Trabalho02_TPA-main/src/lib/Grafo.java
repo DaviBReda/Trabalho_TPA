@@ -14,6 +14,7 @@ public class Grafo<T> {
         this.listaNos = Lista;
     }
 
+    public LinkedList<No<T>> getListaNos(){return this.listaNos;}
 
     public void addElemento(No<T> novoNo){//ADICIONA PASSANDO NÓ
         this.listaNos.add(novoNo);
